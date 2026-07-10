@@ -1,0 +1,116 @@
+.hero.full-bg-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 100px 20px 40px 20px;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  /* 
+    This acts as a placeholder gradient until the image is loaded.
+    Using the dreamy pink/purple vibe from the user's reference image!
+  */
+  background: linear-gradient(to bottom, #d8b4e2, #f5d1e6 50%, #ffe3e3);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Pixel art scaling */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.hero-glass-card {
+  max-width: 650px;
+  padding: 50px 40px;
+  text-align: center;
+  /* Override default glass panel for a slightly whiter, softer look */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero h1 {
+  font-family: 'Pixelify Sans', monospace;
+  font-size: 5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--color-text-main);
+  letter-spacing: -1px;
+}
+
+.highlight-lavender {
+  color: #9d7dfa; /* Slightly darker lavender for contrast on light glass */
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  color: var(--color-text-main);
+  line-height: 1.6;
+  margin-bottom: 40px;
+  font-weight: 600;
+  max-width: 500px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.huge-button {
+  font-family: 'Pixelify Sans', monospace;
+  font-size: 1.5rem;
+  padding: 16px 32px;
+}
+
+.secondary-button {
+  background-color: rgba(255,255,255,0.5);
+  color: var(--color-text-main);
+  font-weight: 700;
+  border: 2px solid transparent;
+  border-radius: var(--radius-full);
+  transition: all 0.3s ease;
+}
+
+.secondary-button:hover {
+  background-color: white;
+  border-color: rgba(255,255,255,0.8);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .hero-glass-card {
+    padding: 30px 20px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .huge-button {
+    width: 100%;
+  }
+}

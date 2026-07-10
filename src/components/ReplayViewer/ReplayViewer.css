@@ -1,0 +1,76 @@
+.replay-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(227, 242, 253, 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.replay-modal {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 8px 8px 0 rgba(163, 201, 240, 0.5);
+  border: 4px solid var(--color-text-main);
+  position: relative;
+  text-align: center;
+  font-family: 'Pixelify Sans', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.replay-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--color-text-light);
+  cursor: pointer;
+}
+
+.replay-close:hover {
+  color: var(--color-peach);
+}
+
+.replay-header h3 {
+  font-size: 1.8rem;
+  color: var(--color-text-main);
+  margin-bottom: 4px;
+}
+
+.replay-header p {
+  color: var(--color-text-light);
+  font-family: 'Quicksand', sans-serif;
+  margin-bottom: 20px;
+}
+
+.replay-canvas-container {
+  border: 4px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  width: 400px;
+  height: 400px;
+}
+
+.replay-canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.replay-status {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: var(--color-lavender);
+  font-weight: 700;
+}

@@ -1,0 +1,98 @@
+.profile-container {
+  padding: 80px 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.profile-header h2 {
+  font-family: 'Pixelify Sans', monospace;
+  font-size: 3rem;
+  color: var(--color-text-main);
+  margin-bottom: 10px;
+}
+
+.profile-header p {
+  color: var(--color-text-light);
+  font-size: 1.2rem;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.profile-card {
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 16px;
+  border: 4px solid var(--color-text-main);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.profile-card:hover {
+  transform: translateY(-8px);
+}
+
+.profile-art-preview {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 4px solid var(--color-border);
+  background-color: white;
+  position: relative;
+}
+
+.profile-art-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.private-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--color-peach);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  border: 2px solid var(--color-text-main);
+}
+
+.profile-art-info {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-art-info h3 {
+  font-size: 1.2rem;
+  color: var(--color-text-main);
+  margin-bottom: 4px;
+}
+
+.profile-art-info p {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+.profile-art-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cozy-button.small {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  flex: 1;
+}

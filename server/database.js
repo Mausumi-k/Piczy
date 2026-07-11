@@ -1,44 +1,15 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const mongoose = require('mongoose');
 
-const dbPath = path.resolve(__dirname, 'pixelia.db');
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/pixelia';
 
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
+const connectDB = async () => {
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('Connected to the MongoDB database.');
+  } catch (err) {
     console.error('Error opening database', err.message);
-  } else {
-    console.log('Connected to the SQLite database.');
-    
-    // Initialize tables
-    db.serialize(() => {
-      // Users table
-      db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT UNIQUE NOT NULL,
-          password_hash TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      // Artworks table
-      db.run(`
-        CREATE TABLE IF NOT EXISTS artworks (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          author_id INTEGER NOT NULL,
-          author_name TEXT NOT NULL,
-          title TEXT,
-          image_data TEXT NOT NULL,
-          stroke_history TEXT DEFAULT '[]',
-          is_private INTEGER DEFAULT 0,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (author_id) REFERENCES users (id)
-        )
-      `);
-      
-      console.log('Database tables initialized.');
-    });
+    process.exit(1);
   }
-});
+};
 
-module.exports = db;
+module.exports = connectDB;

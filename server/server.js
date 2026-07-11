@@ -4,9 +4,14 @@ const cors = require('cors');
 const { GoogleGenAI } = require('@google/genai');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('./database');
+const connectDB = require('./database');
+const User = require('./models/User');
+const Artwork = require('./models/Artwork');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pixelia-super-secret-key-99';
+
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -24,35 +29,35 @@ app.post('/api/auth/register', async (req, res) => {
   if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
 
   try {
+    const existingUser = await User.findOne({ username });
+    if (existingUser) return res.status(400).json({ error: 'Username already taken' });
+
     const hash = await bcrypt.hash(password, 10);
-    db.run(`INSERT INTO users (username, password_hash) VALUES (?, ?)`, [username, hash], function(err) {
-      if (err) {
-        if (err.message.includes('UNIQUE')) return res.status(400).json({ error: 'Username already taken' });
-        return res.status(500).json({ error: err.message });
-      }
+    const user = await User.create({ username, password_hash: hash });
       
-      const token = jwt.sign({ id: this.lastID, username }, JWT_SECRET, { expiresIn: '7d' });
-      res.status(201).json({ success: true, token, user: { id: this.lastID, username } });
-    });
+    const token = jwt.sign({ id: user._id, username }, JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({ success: true, token, user: { id: user._id, username } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
 
-  db.get(`SELECT * FROM users WHERE username = ?`, [username], async (err, user) => {
-    if (err) return res.status(500).json({ error: err.message });
+  try {
+    const user = await User.findOne({ username });
     if (!user) return res.status(400).json({ error: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ success: true, token, user: { id: user.id, username: user.username } });
-  });
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ success: true, token, user: { id: user._id, username: user.username } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Middleware to verify token for protected routes
@@ -72,18 +77,23 @@ const authenticateToken = (req, res, next) => {
 // --- Gallery API ---
 
 // Fetch recent public artworks
-app.get('/api/gallery', (req, res) => {
-  const sql = `SELECT * FROM artworks WHERE is_private = 0 ORDER BY created_at DESC LIMIT 20`;
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(rows);
-  });
+app.get('/api/gallery', async (req, res) => {
+  try {
+    const artworks = await Artwork.find({ is_private: 0 })
+      .sort({ created_at: -1 })
+      .limit(20)
+      .lean(); // Return plain JS objects
+    
+    // Map _id to id for frontend compatibility
+    const formatted = artworks.map(art => ({ ...art, id: art._id }));
+    res.json(formatted);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Publish or Save a new artwork (Protected)
-app.post('/api/gallery', authenticateToken, (req, res) => {
+app.post('/api/gallery', authenticateToken, async (req, res) => {
   const { author_id, author_name, title, image_data, stroke_history, is_private } = req.body;
   
   if (!author_id || !image_data) {
@@ -93,24 +103,33 @@ app.post('/api/gallery', authenticateToken, (req, res) => {
   const historyStr = stroke_history ? JSON.stringify(stroke_history) : '[]';
   const isPrivateInt = is_private ? 1 : 0;
 
-  const sql = `INSERT INTO artworks (author_id, author_name, title, image_data, stroke_history, is_private) VALUES (?, ?, ?, ?, ?, ?)`;
-  db.run(sql, [author_id, author_name, title || 'Untitled', image_data, historyStr, isPrivateInt], function(err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.status(201).json({ id: this.lastID, success: true });
-  });
+  try {
+    const artwork = await Artwork.create({
+      author_id,
+      author_name,
+      title: title || 'Untitled',
+      image_data,
+      stroke_history: historyStr,
+      is_private: isPrivateInt
+    });
+    res.status(201).json({ id: artwork._id, success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Fetch user's personal artworks (Protected)
-app.get('/api/user/artworks', authenticateToken, (req, res) => {
-  const sql = `SELECT * FROM artworks WHERE author_id = ? ORDER BY created_at DESC`;
-  db.all(sql, [req.user.id], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(rows);
-  });
+app.get('/api/user/artworks', authenticateToken, async (req, res) => {
+  try {
+    const artworks = await Artwork.find({ author_id: req.user.id })
+      .sort({ created_at: -1 })
+      .lean();
+      
+    const formatted = artworks.map(art => ({ ...art, id: art._id }));
+    res.json(formatted);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // --- AI Magic Wand API ---

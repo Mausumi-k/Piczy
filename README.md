@@ -41,7 +41,7 @@ The goal of Piczy is to create a **simple, visually appealing, and beginner-frie
 ---
 
 ### Author
-Mausumi Kommineni**
+Mausumi Kommineni
 
 
 <p align="center"> 🎨 <strong>Piczy — Create Your Pixel World.</strong> </p>

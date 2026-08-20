@@ -1,16 +1,47 @@
-# React + Vite
+# 🎨 Piczy
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> A cozy and interactive pixel-art drawing platform designed to make creating pixel art simple, creative, and fun.
 
-Currently, two official plugins are available:
+Piczy is a web-based pixel-art platform inspired by the charm of **Stardew Valley** and the simplicity of **Aseprite**. It provides a clean and interactive workspace where users can create and experiment with pixel art directly in the browser.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+##  Features
 
-## React Compiler
+ **Pixel Art Editor** — Interactive workspace for creating pixel artwork.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+ **Drawing Interface** — Includes a toolbar, sidebar, canvas area, inspector, and status bar.
 
-## Expanding the Oxlint configuration
+ **Cozy UI Design** — Soft, colorful, pixel-inspired visual style.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+ **Smooth Animations** — Interactive transitions for a better user experience.
+
+ **Creative Workspace** — Simple and beginner-friendly environment for pixel-art creation.
+
+##  Built With
+
+* React
+* Vite
+* JavaScript
+* HTML5 Canvas
+* CSS
+* Framer Motion
+
+##  Getting Started
+
+```bash
+git clone https://github.com/your-username/piczy.git
+cd piczy
+npm install
+npm run dev
+```
+
+## Project Goal
+
+The goal of Piczy is to create a **simple, visually appealing, and beginner-friendly pixel-art experience** where creativity comes first.
+
+---
+
+### Author
+Mausumi Kommineni**
+
+
+<p align="center"> 🎨 <strong>Piczy — Create Your Pixel World.</strong> </p>
